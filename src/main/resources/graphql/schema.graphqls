@@ -1,0 +1,101 @@
+scalar BigDecimal
+
+enum OrderStatus { PENDING PROCESSING SHIPPED DELIVERED CANCELLED }
+enum SortDirection { ASC DESC }
+
+input PageInput {
+    page: Int! = 0
+    size: Int! = 20
+    sortBy: String
+    sortDir: SortDirection = ASC
+}
+
+input ProductFilter {
+    nameContains: String
+    minPrice: BigDecimal
+    maxPrice: BigDecimal
+    categoryId: Long
+    minStock: Int
+}
+
+input OrderFilter {
+    userId: Long
+    status: OrderStatus
+    fromDate: String
+    toDate: String
+}
+
+input CreateProductInput {
+    name: String!
+    price: BigDecimal!
+    stock: Int!
+    categoryId: Long!
+}
+
+input CreateOrderInput {
+    userId: Long!
+    items: [OrderItemInput!]!
+}
+
+input OrderItemInput {
+    productId: Long!
+    quantity: Int!
+}
+
+type ProductResponse {
+    id: ID!
+    name: String!
+    price: BigDecimal!
+    stock: Int!
+    categoryId: Long!
+    categoryName: String!
+    createdAt: String!
+}
+
+type OrderItemResponse {
+    id: ID!
+    productId: Long!
+    productName: String!
+    quantity: Int!
+    unitPrice: BigDecimal!
+}
+
+type OrderResponse {
+    id: ID!
+    status: String!
+    createdAt: String!
+    userId: Long!
+    userName: String!
+    userEmail: String!
+    items: [OrderItemResponse!]!
+}
+
+type PageInfo {
+    totalElements: Long!
+    totalPages: Int!
+    currentPage: Int!
+    pageSize: Int!
+}
+
+type ProductPage {
+    content: [ProductResponse!]!
+    pageInfo: PageInfo!
+}
+
+type OrderPage {
+    content: [OrderResponse!]!
+    pageInfo: PageInfo!
+}
+
+type Query {
+    products(filter: ProductFilter, page: PageInput): ProductPage!
+    product(id: ID!): ProductResponse
+    orders(filter: OrderFilter, page: PageInput): OrderPage!
+    order(id: ID!): OrderResponse
+}
+
+type Mutation {
+    createProduct(input: CreateProductInput!): ProductResponse!
+    createOrder(input: CreateOrderInput!): OrderResponse!
+    updateOrderStatus(id: ID!, status: OrderStatus!): OrderResponse!
+}
