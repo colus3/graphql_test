@@ -31,6 +31,7 @@ dependencies {
     implementation("com.graphql-java:graphql-java-extended-scalars:22.0")
     kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
     runtimeOnly("com.mysql:mysql-connector-j")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
     testImplementation("org.springframework.boot:spring-boot-starter-graphql-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
@@ -39,6 +40,7 @@ dependencies {
 }
 
 kapt {
+    correctErrorTypes = true
     arguments {
         arg("plugin", "com.querydsl.apt.jpa.JPAAnnotationProcessor")
     }
@@ -59,3 +61,9 @@ allOpen {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+// QueryDSL은 main 소스에서만 필요하므로 test kapt 비활성화
+tasks.matching { it.name in setOf("kaptGenerateStubsTestKotlin", "kaptTestKotlin") }.configureEach {
+    enabled = false
+}
+
