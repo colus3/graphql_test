@@ -28,6 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("tools.jackson.module:jackson-module-kotlin")
     implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    implementation("com.graphql-java:graphql-java-extended-scalars:22.0")
     kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
     runtimeOnly("com.mysql:mysql-connector-j")
     testImplementation("org.springframework.boot:spring-boot-starter-data-jpa-test")
